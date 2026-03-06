@@ -4,6 +4,7 @@ import requests
 from pathlib import Path
 from dotenv import load_dotenv
 from sarvamai import SarvamAI
+from src.services.srt_generator import generate_srt_from_diarization
 
 from utils.logger import logger
 from config.path import ENV_PATH
@@ -245,6 +246,18 @@ def transcribe_with_batch(
             transcript = transcript_json.get("transcript")
             diarized_transcript = transcript_json.get("diarized_transcript")
             timestamps = transcript_json.get("timestamps")
+            
+            srt_output = None
+
+            if diarized_transcript:
+                try:
+                    srt_output = generate_srt_from_diarization(diarized_transcript)
+
+                    logger.info(f"SRT Output:\n{srt_output}")
+                    print(f"SRT Output:\n{srt_output}\n")
+
+                except Exception:
+                    logger.exception("SRT generation failed")
 
             # Update metadata with transcript
             metadata[file_hash]["status"] = "completed"

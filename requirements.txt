@@ -8,3 +8,6 @@ requests
 PyYAML
 soundfile
 ipykernel
+langchain
+langchain-google-genai
+google-generativeai
